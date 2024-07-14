@@ -19,8 +19,6 @@ const pgClient = new Pool({
     port: keys.pgPort,
 });
 pgClient.on("connect", (client) => {
-    console.log('got into connect');
-
     client
       .query("CREATE TABLE IF NOT EXISTS values (number INT)")
       .catch((err) => console.error(err));
@@ -41,8 +39,8 @@ app.get('/', (req, res) => {
     res.send('Hi');
 });
 
-app.get('/newval', (req, res) => {
-    res.send(21);
+app.get('/keys', (req, res) => {
+    res.send([keys.pgUser, keys.pgHost, keys.pgDatabase, keys.pgPassword, keys.pgPort]);
 });
 
 app.get('/dbval', (req, res) => {
