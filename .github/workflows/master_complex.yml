@@ -16,16 +16,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
-
-      - name: npm install, build, and test
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build -t ivankievets/react-test -f ./client/Dockerfile.dev ./client
+      - run: docker run -e CI=true ivankievets/react-test npm test
+ 
+      - run: docker build -t ivankievets/multi-client-10-14 ./client
+      - run: docker build -t ivankievets/multi-nginx-10-14 ./nginx
+      - run: docker build -t ivankievets/multi-server-10-14 ./server
+      - run: docker build -t ivankievets/multi-worker-10-14 ./worker
+ 
+      - run: docker push ivankievets/multi-client-10-14
+      - run: docker push ivankievets/multi-nginx-10-14
+      - run: docker push ivankievets/multi-server-10-14
+      - run: docker push ivankievets/multi-worker-10-14
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
