@@ -19,6 +19,8 @@ const pgClient = new Pool({
     port: keys.pgPort,
 });
 pgClient.on("connect", (client) => {
+    console.log('got into connect');
+
     client
       .query("CREATE TABLE IF NOT EXISTS values (number INT)")
       .catch((err) => console.error(err));
@@ -40,10 +42,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/newval', (req, res) => {
-    res.send('new value');
+    res.send(21);
 });
 
 app.get('/dbval', (req, res) => {
+    console.log('got into dbval');
     const values = pgClient.query('SELECT * from values');
 
     res.send(values.rows);
