@@ -39,6 +39,16 @@ app.get('/', (req, res) => {
     res.send('Hi');
 });
 
+app.get('/newval', (req, res) => {
+    res.send('new value');
+});
+
+app.get('/dbval', (req, res) => {
+    const values = pgClient.query('SELECT * from values');
+
+    res.send(values.rows);
+});
+
 app.get('/values/all', async (req, res) => {
     const values = await pgClient.query('SELECT * from values');
 
