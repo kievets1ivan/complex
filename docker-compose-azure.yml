@@ -24,8 +24,9 @@ services:
       - /app/node_modules
       - ./server:/app
     environment:
-      - REDIS_HOST=redis
+      - REDIS_HOST=complex-app.redis.cache.windows.net
       - REDIS_PORT=6379
+      - REDIS_PASSWORD=WgvgBfuyX41Bq4lh7YBfl7zzDkp6mzKahAzCaM6Flck=
       - PGUSER=adminusername
       - PGHOST=complex-server.postgres.database.azure.com
       - PGDATABASE=postgres
@@ -48,5 +49,6 @@ services:
       - /app/node_modules
       - ./worker:/app
     environment:
-      - REDIS_HOST=redis
+      - REDIS_HOST=complex-app.redis.cache.windows.net
       - REDIS_PORT=6379
+      - REDIS_PASSWORD=WgvgBfuyX41Bq4lh7YBfl7zzDkp6mzKahAzCaM6Flck=

@@ -30,7 +30,7 @@ const redis = require('redis');
 const redisClient = redis.createClient({
     host: keys.redisHost,
     port: keys.redisPort,
-    no_ready_check: true,
+    password: keys.redisPassword,
     retry_strategy: () => 1000,
 });
 const redisPublisher = redisClient.duplicate();
@@ -43,13 +43,6 @@ app.get('/', (req, res) => {
 
 app.get('/keys', (req, res) => {
     res.send([keys.pgUser, keys.pgHost, keys.pgDatabase, keys.pgPassword, keys.pgPort]);
-});
-
-app.get('/dbval', (req, res) => {
-    console.log('got into dbval');
-    const values = pgClient.query('SELECT * from values');
-
-    res.send(values.rows);
 });
 
 app.get('/values/all', async (req, res) => {
