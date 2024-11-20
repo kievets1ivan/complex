@@ -1,0 +1,35 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - POSTGRES_PASSWORD=postgres_password
+  redis:
+    image: 'redis:latest'
+  nginx:
+    depends_on:
+      - api
+      - client
+    restart: always
+    image: ivankievets/multi-nginx-10-14:latest
+    ports:
+      - '3050:80'
+  api:
+    image: ivankievets/multi-server-10-14:nossl
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
+  client:
+    image: ivankievets/multi-client-10-14:latest
+    environment:
+      - WDS_SOCKET_PORT=0
+  worker:
+    image: ivankievets/multi-worker-10-14:latest
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
